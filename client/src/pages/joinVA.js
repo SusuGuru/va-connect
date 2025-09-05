@@ -1,7 +1,8 @@
-// src/pages/JoinVA.js
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Header from "../components/Header";
 
-function JoinVA() {
+export default function JoinVA({ addVA }) {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -9,73 +10,103 @@ function JoinVA() {
     rate: "",
   });
 
+  const navigate = useNavigate();
+
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Submitted:", formData);
-    alert("Application submitted! We’ll get back to you soon.");
+
+    const name = formData.name.trim();
+    const email = formData.email.trim();
+    const skills = formData.skills.trim();
+    const rate = formData.rate.trim();
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      alert("Please enter a valid email address.");
+      return;
+    }
+
+    const rateRegex = /^\$\d+\/hr$/;
+    if (!rateRegex.test(rate)) {
+      alert("Please enter rate in the format: $15/hr");
+      return;
+    }
+
+    addVA({ name, email, skills, rate });
+    setFormData({ name: "", email: "", skills: "", rate: "" });
+    navigate("/thank-you");
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-6">
-      <h2 className="text-2xl font-bold text-blue-600 mb-4">
-        Join as a Virtual Assistant
-      </h2>
-      <p className="mb-6 text-gray-600">
-        Fill out the form below to apply and join our network of skilled
-        Virtual Assistants.
-      </p>
+    <div className="min-h-screen bg-blue-50">
+      <Header />
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <input
-          type="text"
-          name="name"
-          placeholder="Full Name"
-          value={formData.name}
-          onChange={handleChange}
-          className="w-full border p-3 rounded-lg"
-          required
-        />
-        <input
-          type="email"
-          name="email"
-          placeholder="Email Address"
-          value={formData.email}
-          onChange={handleChange}
-          className="w-full border p-3 rounded-lg"
-          required
-        />
-        <textarea
-          name="skills"
-          placeholder="List your skills"
-          value={formData.skills}
-          onChange={handleChange}
-          className="w-full border p-3 rounded-lg"
-          required
-        ></textarea>
-        <input
-          type="number"
-          name="rate"
-          placeholder="Hourly Rate (USD)"
-          value={formData.rate}
-          onChange={handleChange}
-          className="w-full border p-3 rounded-lg"
-          required
-        />
+      <div className="max-w-md mx-auto p-6">
+        <h2 className="text-3xl font-bold text-center text-blue-600 mb-6">
+          Join as a Virtual Assistant
+        </h2>
 
-        <button
-          type="submit"
-          className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700"
-        >
-          Submit Application
-        </button>
-      </form>
+        <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-lg p-6 space-y-4">
+          <div>
+            <label className="block font-medium text-gray-700 mb-1">Name</label>
+            <input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              required
+              className="border border-gray-300 rounded-lg px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+            />
+          </div>
+
+          <div>
+            <label className="block font-medium text-gray-700 mb-1">Email</label>
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+              className="border border-gray-300 rounded-lg px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+            />
+          </div>
+
+          <div>
+            <label className="block font-medium text-gray-700 mb-1">Skills</label>
+            <textarea
+              name="skills"
+              value={formData.skills}
+              onChange={handleChange}
+              required
+              className="border border-gray-300 rounded-lg px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+            ></textarea>
+          </div>
+
+          <div>
+            <label className="block font-medium text-gray-700 mb-1">Hourly Rate</label>
+            <input
+              type="text"
+              name="rate"
+              value={formData.rate}
+              onChange={handleChange}
+              required
+              placeholder="$15/hr"
+              className="border border-gray-300 rounded-lg px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+            />
+          </div>
+
+          <button
+            type="submit"
+            className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition"
+          >
+            Submit Application
+          </button>
+        </form>
+      </div>
     </div>
   );
 }
-
-export default JoinVA;

@@ -1,129 +1,138 @@
-function Home() {
+import Header from "../components/Header";
+import { Link } from "react-router-dom";
+
+export default function Home({ vas }) {
+  const featuredVAs = (vas || []).slice(-3).reverse();
+
   return (
     <div>
+      <Header />
+
       {/* Hero Section */}
-      <section className="bg-blue-50 py-20 text-center">
-        <h1 className="text-4xl md:text-6xl font-bold text-blue-600">
-          Connect with Top Virtual Assistants
+      <section className="bg-blue-50 py-24 text-center">
+        <h1 className="text-6xl md:text-7xl font-extrabold text-blue-600 mb-4 animate-pulse">
+          VA Connect
         </h1>
-        <p className="mt-6 text-lg text-gray-700 max-w-2xl mx-auto">
-          VA Connect helps entrepreneurs, businesses, and professionals find
-          skilled Virtual Assistants — and gives VAs a platform to showcase
-          their talent.
+        <p className="text-lg text-gray-700 max-w-2xl mx-auto mb-8">
+          Connect with top Virtual Assistants. VA Connect helps entrepreneurs, businesses, and professionals find skilled VAs and gives them a platform to showcase their talent.
         </p>
-        <div className="mt-8 space-x-4">
-          <a
-            href="/find-va"
-            className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700"
+        <div className="space-x-4">
+          <Link
+            to="/find-va"
+            className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition"
           >
             Find a VA
-          </a>
-          <a
-            href="/become-va"
-            className="bg-white text-blue-600 border border-blue-600 px-6 py-3 rounded-lg hover:bg-blue-50"
+          </Link>
+          <Link
+            to="/join-va"
+            className="bg-white text-blue-600 border border-blue-600 px-6 py-3 rounded-lg hover:bg-blue-50 transition"
           >
-            Become a VA
-          </a>
+            Join as a VA
+          </Link>
         </div>
       </section>
 
-      {/* Features Section */}
+      {/* Featured VAs */}
       <section className="py-16 bg-white">
-        <div className="max-w-5xl mx-auto px-6">
-          <h2 className="text-3xl font-bold text-center text-gray-800">
-            Why Choose VA Connect?
-          </h2>
-          <div className="mt-10 grid md:grid-cols-3 gap-8 text-center">
-            <div className="p-6 border rounded-lg shadow hover:shadow-lg">
-              <h3 className="text-xl font-semibold text-blue-600">Skilled VAs</h3>
-              <p className="mt-4 text-gray-600">
-                Access a pool of verified and experienced Virtual Assistants.
-              </p>
+        <div className="max-w-6xl mx-auto px-6 text-center">
+          <h2 className="text-3xl font-bold text-gray-800 mb-10">Featured Virtual Assistants</h2>
+          {featuredVAs.length > 0 ? (
+            <div className="grid md:grid-cols-3 gap-6">
+              {featuredVAs.map((va) => (
+                <div key={va.id} className="border rounded-xl p-6 shadow hover:shadow-lg transition group">
+                  <h3 className="text-xl font-semibold">{va.name}</h3>
+                  <p className="text-gray-600 mt-2">{va.skills}</p>
+                  <p className="text-blue-600 font-bold mt-2">{va.rate}</p>
+                  <Link
+                    to="/find-va"
+                    className="mt-4 inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition opacity-0 group-hover:opacity-100"
+                  >
+                    Contact
+                  </Link>
+                </div>
+              ))}
             </div>
-            <div className="p-6 border rounded-lg shadow hover:shadow-lg">
-              <h3 className="text-xl font-semibold text-blue-600">Global Reach</h3>
-              <p className="mt-4 text-gray-600">
-                Connect with professionals from anywhere in the world.
-              </p>
-            </div>
-            <div className="p-6 border rounded-lg shadow hover:shadow-lg">
-              <h3 className="text-xl font-semibold text-blue-600">Simple & Fast</h3>
-              <p className="mt-4 text-gray-600">
-                Find or offer services in just a few clicks — no hassle.
-              </p>
-            </div>
-          </div>
+          ) : (
+            <p className="mt-6 text-gray-500 text-lg">No featured VAs available.</p>
+          )}
         </div>
       </section>
 
-      {/* How It Works Section */}
+      {/* How It Works */}
       <section className="py-16 bg-blue-50">
-        <div className="max-w-5xl mx-auto px-6 text-center">
-          <h2 className="text-3xl font-bold text-gray-800">How It Works</h2>
-          <div className="mt-10 grid md:grid-cols-3 gap-8">
-            <div className="p-6">
-              <div className="text-blue-600 text-4xl font-bold">1</div>
-              <h3 className="mt-4 text-xl font-semibold">Sign Up</h3>
-              <p className="mt-2 text-gray-600">Create your free account in just a few clicks.</p>
+        <div className="max-w-6xl mx-auto px-6 text-center">
+          <h2 className="text-3xl font-bold text-gray-800 mb-10">How It Works</h2>
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="p-6 border rounded-lg shadow hover:shadow-lg transition">
+              <h3 className="text-xl font-semibold text-blue-600">Search VAs</h3>
+              <p className="mt-4 text-gray-600">Find verified Virtual Assistants based on skills and expertise.</p>
             </div>
-            <div className="p-6">
-              <div className="text-blue-600 text-4xl font-bold">2</div>
-              <h3 className="mt-4 text-xl font-semibold">Browse</h3>
-              <p className="mt-2 text-gray-600">Explore our pool of VAs or list yourself as one.</p>
+            <div className="p-6 border rounded-lg shadow hover:shadow-lg transition">
+              <h3 className="text-xl font-semibold text-blue-600">Connect & Hire</h3>
+              <p className="mt-4 text-gray-600">Contact VAs directly and hire the best match for your business.</p>
             </div>
-            <div className="p-6">
-              <div className="text-blue-600 text-4xl font-bold">3</div>
-              <h3 className="mt-4 text-xl font-semibold">Connect</h3>
-              <p className="mt-2 text-gray-600">Message, hire, and start working together quickly.</p>
+            <div className="p-6 border rounded-lg shadow hover:shadow-lg transition">
+              <h3 className="text-xl font-semibold text-blue-600">Manage Projects</h3>
+              <p className="mt-4 text-gray-600">Collaborate and manage your projects efficiently with your VA.</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Testimonials Section */}
+      {/* Testimonials */}
       <section className="py-16 bg-white">
-        <div className="max-w-5xl mx-auto px-6 text-center">
-          <h2 className="text-3xl font-bold text-gray-800">What Our Users Say</h2>
-          <div className="mt-10 grid md:grid-cols-2 gap-8">
-            <div className="p-6 border rounded-lg shadow">
-              <p className="text-gray-600">
-                “VA Connect helped me find a reliable assistant in less than a week.
-                It saved my business so much time!”
-              </p>
-              <h4 className="mt-4 font-semibold text-blue-600">— Sarah, Entrepreneur</h4>
+        <div className="max-w-6xl mx-auto px-6 text-center">
+          <h2 className="text-3xl font-bold text-gray-800 mb-10">What Our Users Say</h2>
+          <div className="grid md:grid-cols-3 gap-6">
+            <div className="p-6 border rounded-lg shadow hover:shadow-lg transition">
+              <p className="text-gray-600 italic">"VA Connect helped me find an amazing VA within days!"</p>
+              <p className="mt-4 font-semibold text-blue-600">— Michael</p>
             </div>
-            <div className="p-6 border rounded-lg shadow">
-              <p className="text-gray-600">
-                “As a VA, VA Connect gave me clients from all over the world.
-                I now work fully remote and love it.”
-              </p>
-              <h4 className="mt-4 font-semibold text-blue-600">— James, Virtual Assistant</h4>
+            <div className="p-6 border rounded-lg shadow hover:shadow-lg transition">
+              <p className="text-gray-600 italic">"Highly recommend for anyone needing skilled assistants."</p>
+              <p className="mt-4 font-semibold text-blue-600">— Sarah</p>
+            </div>
+            <div className="p-6 border rounded-lg shadow hover:shadow-lg transition">
+              <p className="text-gray-600 italic">"The platform is intuitive and VAs are top-notch."</p>
+              <p className="mt-4 font-semibold text-blue-600">— James</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Final Call to Action */}
-      <section className="bg-blue-600 py-20 text-center text-white">
-        <h2 className="text-3xl font-bold">Ready to get started?</h2>
-        <p className="mt-4 text-lg">Join VA Connect today and take your work to the next level.</p>
-        <div className="mt-6 space-x-4">
-          <a
-            href="/find-va"
-            className="bg-white text-blue-600 px-6 py-3 rounded-lg hover:bg-gray-100"
-          >
-            Find a VA
-          </a>
-          <a
-            href="/become-va"
-            className="bg-blue-800 text-white px-6 py-3 rounded-lg hover:bg-blue-900"
-          >
-            Become a VA
-          </a>
+      {/* FAQ */}
+      <section className="py-16 bg-blue-50">
+        <div className="max-w-4xl mx-auto px-6">
+          <h2 className="text-3xl font-bold text-gray-800 text-center mb-10">Frequently Asked Questions</h2>
+          <div className="space-y-6">
+            <div>
+              <h3 className="text-xl font-semibold text-blue-600">How do I hire a VA?</h3>
+              <p className="mt-2 text-gray-600">Browse the profiles, contact the VA, and agree on terms directly.</p>
+            </div>
+            <div>
+              <h3 className="text-xl font-semibold text-blue-600">Can I join as a VA?</h3>
+              <p className="mt-2 text-gray-600">Yes! Click on "Join as a VA" and submit your application.</p>
+            </div>
+            <div>
+              <h3 className="text-xl font-semibold text-blue-600">What payment methods are accepted?</h3>
+              <p className="mt-2 text-gray-600">Payments depend on agreement between you and the VA. Common options include PayPal and bank transfer.</p>
+            </div>
+          </div>
         </div>
       </section>
+
+      {/* Footer */}
+      <footer className="bg-blue-600 text-white py-8 mt-12">
+        <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center">
+          <p>&copy; {new Date().getFullYear()} VA Connect. All rights reserved.</p>
+          <div className="flex space-x-4 mt-4 md:mt-0">
+            <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer">Instagram</a>
+            <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer">Facebook</a>
+            <a href="https://www.twitter.com" target="_blank" rel="noopener noreferrer">Twitter</a>
+            <a href="https://wa.me/YOURNUMBER" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
-
-export default Home;
