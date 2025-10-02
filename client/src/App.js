@@ -1,36 +1,95 @@
-import { useState } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+// client/src/App.js
+import React, { createContext, useState, useContext } from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 
-import Home from "./pages/Home";
+import Header from "./components/Header";
+import LandingPage from "./pages/LandingPage";
+import LoginPage from "./pages/LoginPage";
+import SignUpPage from "./pages/SignUpPage";
 import FindVA from "./pages/FindVA";
+import VAProfile from "./pages/VAProfile";
+import HirePage from "./pages/HirePage";
+import ChatRoom from "./pages/ChatRoom";
 import JoinVA from "./pages/JoinVA";
-import ThankYou from "./pages/ThankYou";
 import Contact from "./pages/Contact";
 
-function App() {
-  // Initial Virtual Assistants
-  const [vas, setVas] = useState([
-    { id: 1, name: "Sarah Johnson", skills: "Data Entry, Admin", rate: "$15/hr" },
-    { id: 2, name: "James Lee", skills: "Customer Support, Email Management", rate: "$20/hr" },
-    { id: 3, name: "Maria Gomez", skills: "Social Media Management, Content Creation", rate: "$18/hr" },
-  ]);
+// ✅ import VAProvider properly
+import { VAProvider } from "./context/VAContext";
 
-  // Function to add a new VA
-  const addVA = (newVA) => {
-    const id = vas.length + 1;
-    setVas([...vas, { ...newVA, id }]);
-  };
+// Auth context
+const AuthContext = createContext();
+export const useAuth = () => useContext(AuthContext);
+
+// Protected route wrapper
+function ProtectedRoute({ children }) {
+  const { user } = useAuth();
+  if (!user) return <Navigate to="/login" replace />;
+  return children;
+}
+
+function App() {
+  const [user, setUser] = useState(null);
+
+  const login = (userInfo) => setUser(userInfo);
+  const logout = () => setUser(null);
 
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Home vas={vas} />} />
-        <Route path="/find-va" element={<FindVA vas={vas} />} />
-        <Route path="/join-va" element={<JoinVA addVA={addVA} />} />
-        <Route path="/thank-you" element={<ThankYou />} />
-        <Route path="/contact" element={<Contact />} />
-      </Routes>
-    </Router>
+    <AuthContext.Provider value={{ user, login, logout }}>
+      <VAProvider>
+        <Router>
+          <Header />
+          <Routes>
+            {/* Landing page */}
+            <Route path="/" element={<LandingPage />} />
+
+            {/* Auth pages */}
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<SignUpPage />} />
+            <Route path="/joinva" element={<JoinVA />} />
+
+            {/* Protected pages */}
+            <Route
+              path="/find-va"
+              element={
+                <ProtectedRoute>
+                  <FindVA />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profile/:id"
+              element={
+                <ProtectedRoute>
+                  <VAProfile />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/hire/:id"
+              element={
+                <ProtectedRoute>
+                  <HirePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/chat/:id"
+              element={
+                <ProtectedRoute>
+                  <ChatRoom />
+                </ProtectedRoute>
+              }
+            />
+
+            {/* Contact (not protected) */}
+            <Route path="/contact" element={<Contact />} />
+
+            {/* Fallback → landing */}
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </Router>
+      </VAProvider>
+    </AuthContext.Provider>
   );
 }
 
